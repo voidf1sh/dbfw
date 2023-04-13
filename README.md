@@ -10,3 +10,5 @@ Bot token goes in `config.json`.
 If you make a change to a command you can execute `/reload all` or `/reload folder modules` to update the command without restarting the bot.
 
 If a new command is added execute the previous commad and run `/refresh` to update the guild slash commands without restarting the bot.
+
+I'm using the version control system intergration in VSCode to sync and update my branch.
