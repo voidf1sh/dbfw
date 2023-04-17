@@ -1,6 +1,6 @@
 import { EmbedBuilder } from "@discordjs/builders";
 import { Colors } from "discord.js";
-import bot from "../../../cache";
+import { bot } from "../../../cache";
 import { bullet } from "../../../constants/constants";
 
 export function reloadEmbed(msg: string) {

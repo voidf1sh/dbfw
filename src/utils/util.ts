@@ -1,4 +1,4 @@
-import bot from "../cache";
+import { bot } from "../cache";
 import { existsSync, lstatSync, readdirSync } from "fs";
 import { join, sep } from "path";
 import { REST, Routes, RESTPostAPIChatInputApplicationCommandsJSONBody } from "discord.js";

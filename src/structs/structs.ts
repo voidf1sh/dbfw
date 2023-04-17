@@ -7,9 +7,13 @@ import {
     SlashCommandBuilder
 } from "discord.js";
 import { Module } from "../enums/enums";
-import { BotInterface, CommandData, CommandInterface, EventData, EventInterface } from "../types/types";
+import { BotInterface, CommandData, CommandInterface, EventData, EventInterface, SQLInterface } from "../types/types";
 import { basename, join } from "path";
-import bot from "../cache";
+import { Connection, ConnectionOptions, createConnection } from "mysql2/promise";
+import { bot } from "../cache";
+import { log } from "../utils/logger";
+import { SQLTag } from "../constants/constants";
+import { green, dim } from "chalk";
 
 
 export class Bot extends Client<boolean> implements BotInterface {
@@ -161,5 +165,30 @@ export class Event implements EventInterface {
 
     isOnce(): boolean {
         return this.once;
+    }
+}
+
+export class SQLClass implements SQLInterface {
+    private config: ConnectionOptions
+    private connection: Connection;
+
+    constructor(config: ConnectionOptions) {
+        this.config = config;
+    }
+
+    async connect(): Promise<void> {
+        this.connection = await createConnection(this.config);
+        await this.query("CREATE DATABASE IF NOT EXISTS DISCORD");
+        await this.connection.changeUser({database: "DISCORD"});
+        log(green("Connected to SQL database!"), SQLTag);
+    }
+
+    getConnection(): Connection {
+        return this.connection;
+    }
+
+    async query(q: string) {
+        log(dim(q), SQLTag);
+        return await this.connection.execute(q);
     }
 }

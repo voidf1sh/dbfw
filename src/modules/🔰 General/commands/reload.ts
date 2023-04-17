@@ -3,7 +3,7 @@ import { loadAll, loadDir } from "../../../utils/util";
 import { reloadEmbed } from "../Embeds/generalEmbeds";
 import { CommandData, EventData } from "../../../types/types";
 import { join, sep } from "path";
-import bot from "../../../cache";
+import { bot } from "../../../cache";
 
 //The choices for this command are assigned in a special way, so you wont see them being assigned in this file.
 
