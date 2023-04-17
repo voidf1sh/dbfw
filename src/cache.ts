@@ -1,7 +1,8 @@
 import { GatewayIntentBits, Partials } from "discord.js";
-import { Bot } from "./structs/structs";
+import { Bot, SQLClass } from "./structs/structs";
+import { sqlconfig } from "../config.json";
 
-const bot = new Bot({
+export const bot = new Bot({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
@@ -14,4 +15,4 @@ const bot = new Bot({
     partials: [Partials.Message, Partials.Reaction] 
 });
 
-export default bot;
+export const SQL = new SQLClass(sqlconfig);

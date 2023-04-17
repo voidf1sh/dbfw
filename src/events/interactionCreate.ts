@@ -1,5 +1,5 @@
 import { CommandInteraction } from "discord.js";
-import bot from "../cache";
+import { bot } from "../cache";
 import { log } from "../utils/logger";
 import { cyan, dim, grey, red } from "chalk";
 import { CmdTag, ErrTag } from "../constants/constants";

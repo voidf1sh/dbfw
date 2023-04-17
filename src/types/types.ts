@@ -1,6 +1,7 @@
 import { Module } from "../enums/enums"
 import { Client, ClientEvents, Collection, CommandInteraction, SlashCommandBuilder } from "discord.js"
 import { Command, Event } from "../structs/structs";
+import { Connection, FieldPacket, OkPacket, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 
 export interface BotInterface extends Client<boolean> {
     addCommand: (data: CommandData, path: string) => void;
@@ -32,6 +33,12 @@ export interface EventInterface {
     getName: () => string;
     getPath: () => string;
     isOnce: () => boolean;
+}
+
+export interface SQLInterface {
+    getConnection: () => Connection;
+    connect: () => Promise<void>;
+    query: (q: string) => Promise<[RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]]>;
 }
 
 export type LoadData<T> = Collection<T, {success: string[], failed: string[]}>

@@ -1,5 +1,5 @@
 import { bold, dim } from "chalk";
-import { logging } from "../config/config.json";
+import { logging } from "../../config.json";
 
 function _time() {
     const date = new Date();
@@ -21,7 +21,14 @@ export function log(message: string, tag?: string) {
     const data = new Error().stack.split("at ");
     const target = data[data.findIndex(d => d.startsWith("Generator.next")) - 1];
     const filename = target?.split("\\").pop().slice(0, target?.split("\\").pop().indexOf(":"));
-    const [line, column] = target?.split(":").slice(-2);
+
+    let line = "Unknown";
+    let column = "Unknown";
+
+    try {
+        [line, column] = target?.split(":").slice(-2);
+    } catch(_) { /***/ }
+    
   
     if(tag)
         console.log(`[${bold(_time())}] ${tag} ${message} (${dim(filename + ":" + line.trim() + ":" + column.trim())})`);

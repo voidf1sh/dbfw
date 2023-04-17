@@ -1,5 +1,5 @@
 import { refreshGuildSlashes } from "../utils/util"
-import bot from "../cache";
+import { bot } from "../cache";
 import { log } from "../utils/logger";
 import { green } from "chalk";
 import { ReadyTag } from "../constants/constants";
