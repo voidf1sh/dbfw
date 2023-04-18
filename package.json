@@ -6,9 +6,26 @@
     "@discordjs/rest": "^1.7.0",
     "@discordjs/util": "^0.2.0",
     "@discordjs/ws": "^0.8.0",
+    "@mapbox/node-pre-gyp": "^1.0.10",
     "chalk": "^4.1.2",
     "discord.js": "^14.9.0",
     "dotenv": "^16.0.3",
-    "mysql2": "^3.2.3"
+    "mysql2": "^3.2.3",
+    "node-pre-gyp": "^0.17.0",
+    "npm": "^9.6.4"
+  },
+  "name": "database-sys-project",
+  "version": "1.0.0",
+  "main": "mod.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "binary": {
+    "module_name": "a",
+    "module_path": "node_modules",
+    "host": "c"
   }
 }
