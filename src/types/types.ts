@@ -36,11 +36,52 @@ export interface EventInterface {
 }
 
 export interface SQLInterface {
+    exec: (query: string, values?: unknown[]) => Promise<[RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]]>;
     getConnection: () => Connection;
-    connect: () => Promise<void>;
-    query: (q: string) => Promise<[RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]]>;
+    query: (query: string) => Promise<[RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]]>;
 }
 
-export type LoadData<T> = Collection<T, {success: string[], failed: string[]}>
-export type CommandData = {data: SlashCommandBuilder, execute: (interaction: CommandInteraction) => Promise<void>}
-export type EventData = {name: string, event: keyof ClientEvents, once?: boolean, execute: (...args: unknown[]) => Promise<void>}
+export interface EconomyInterface {
+    getBalance: (uid: string, gid: string) => Promise<[number, number]>;
+    set: (id: string, amount: number) => Promise<void>;
+}
+
+export type LoadData<T> = Collection<T, {success: string[], failed: string[]}>;
+export type CommandData = {data: SlashCommandBuilder, execute: (interaction: CommandInteraction) => Promise<void>};
+export type EventData = {name: string, event: keyof ClientEvents, once?: boolean, execute: (...args: unknown[]) => Promise<void>};
+
+export type SQL_VARCHAR = {size: number, type: string, null: boolean};
+export type SQL_FLOAT = {size: number, type: number, null: boolean};
+export type SQL_INT = {type: "INT", null?: boolean};
+
+export type SQLTypes = SQL_INT | SQL_FLOAT | SQL_VARCHAR;
+
+export class VARCHAR implements SQL_VARCHAR {
+    size: number;
+    type: string;
+    null: boolean;
+
+    constructor(size: number, isNull: boolean = true) {
+        this.size = size;
+        this.null = isNull;
+    }
+
+    toString(): string {
+        return `VARCHAR(${this.size})${this.null ? " NULL" : " NOT NULL"}`;
+    }
+}
+
+export class FLOAT implements SQL_FLOAT {
+    size: number;
+    type: number;
+    null: boolean;
+
+    constructor(size: number, isNull: boolean = true) {
+        this.size = size;
+        this.null = isNull;
+    }
+
+    toString(): string {
+        return `FLOAT(${this.size})${this.null ? " NULL" : " NOT NULL"}`;
+    }
+}
