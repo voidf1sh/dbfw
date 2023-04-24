@@ -28,13 +28,13 @@ sudo mysql_secure_installation
 https://dev.mysql.com/downloads/mysql/
 
 ### Node Canvas
-**Ubuntu**
+**Ubuntu:**
 `sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev`
 
-**macOS**
+**macOS:**
 `brew install pkg-config cairo pango libpng jpeg giflib librsvg pixman`
 
-**Windows**
+**Windows:**
 Good luck
 
 ### Remaining Dependencies
@@ -57,10 +57,10 @@ The command template can be found in any exisiting command and can be copied and
 
 The data and execution function can be manipulated or expanded on based on the function of the command.
 
-### SQL
+## SQL
 SQL functions are found in /src/structs/sql.ts
 
-## Tables
+### Tables
 SQL tables are represented as classes in this app. Each class in the SQL file that represents a table in SQL extend another class called "BaseTable". This base class handles automatic creation of tables such that they do not exist in the database yet.
 
 These classes double as schemas for the tables with custom TypeScript types.
@@ -94,7 +94,7 @@ These classes can then have unique classes related to the data in each table. Th
 Then, the class can be exported and imported in any file or command that needs access to that table and it's data methods.
 
 ## Bot Usage
-The bot comes with a few default utility commands to help developement.
+The bot comes with a few default utility commands to help development.
 
 ### Reloading
 The `/reload` command can be used to reload everything or a specific target so that a manual bot restart is not required. This is good when a change in a command is made, for example.
