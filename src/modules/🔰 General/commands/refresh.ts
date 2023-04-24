@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { refreshGuildSlashes } from "../../../utils/util";
 import { bot } from "../../../cache";
-import { refreshEmbed } from "../Embeds/generalEmbeds";
+import { refreshEmbed } from "../embeds/generalEmbeds";
 
 export default {
     data: new SlashCommandBuilder()

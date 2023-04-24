@@ -41,11 +41,6 @@ export interface SQLInterface {
     query: (query: string) => Promise<[RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]]>;
 }
 
-export interface EconomyInterface {
-    getBalance: (uid: string, gid: string) => Promise<[number, number]>;
-    set: (id: string, amount: number) => Promise<void>;
-}
-
 export type LoadData<T> = Collection<T, {success: string[], failed: string[]}>;
 export type CommandData = {data: SlashCommandBuilder, execute: (interaction: CommandInteraction) => Promise<void>};
 export type EventData = {name: string, event: keyof ClientEvents, once?: boolean, execute: (...args: unknown[]) => Promise<void>};
@@ -53,6 +48,12 @@ export type EventData = {name: string, event: keyof ClientEvents, once?: boolean
 export type SQL_VARCHAR = {size: number, type: string, null: boolean};
 export type SQL_FLOAT = {size: number, type: number, null: boolean};
 export type SQL_INT = {type: "INT", null?: boolean};
+
+type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] extends N
+  ? Acc[number]
+  : Enumerate<N, [...Acc, Acc['length']]>
+
+export type IntRage<F extends number, T extends number> = Exclude<Enumerate<T>, Enumerate<F>>
 
 export type SQLTypes = SQL_INT | SQL_FLOAT | SQL_VARCHAR;
 

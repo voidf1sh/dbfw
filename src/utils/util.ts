@@ -93,7 +93,8 @@ export async function loadDir(dir: string, filter?: (file: string) => boolean) {
         loaded.push(module);
         delete require.cache[filePath];
         log(`${dim(filePath.slice(filePath.indexOf("src")))}`, LoadTag);
-      } catch(_) {
+      } catch(err) {
+        console.log(err);
         log(`${dim(filePath.slice(filePath.indexOf("src")))}`, `${ErrTag} ${LoadTag}`);
       }
     }
@@ -101,3 +102,10 @@ export async function loadDir(dir: string, filter?: (file: string) => boolean) {
     return loaded;
   }
   
+export function rgbToHex(r: number, g: number, b: number) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+export function rad(deg: number): number {
+    return deg * Math.PI / 180;
+}
