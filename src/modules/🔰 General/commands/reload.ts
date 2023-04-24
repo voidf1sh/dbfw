@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { loadAll, loadDir } from "../../../utils/util";
-import { reloadEmbed } from "../Embeds/generalEmbeds";
+import { reloadEmbed } from "../embeds/generalEmbeds";
 import { CommandData, EventData } from "../../../types/types";
 import { join, sep } from "path";
 import { bot } from "../../../cache";

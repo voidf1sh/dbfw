@@ -41,11 +41,6 @@ export interface SQLInterface {
     query: (query: string) => Promise<[RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]]>;
 }
 
-export interface EconomyInterface {
-    getBalance: (uid: string, gid: string) => Promise<[number, number]>;
-    set: (id: string, amount: number) => Promise<void>;
-}
-
 export type LoadData<T> = Collection<T, {success: string[], failed: string[]}>;
 export type CommandData = {data: SlashCommandBuilder, execute: (interaction: CommandInteraction) => Promise<void>};
 export type EventData = {name: string, event: keyof ClientEvents, once?: boolean, execute: (...args: unknown[]) => Promise<void>};

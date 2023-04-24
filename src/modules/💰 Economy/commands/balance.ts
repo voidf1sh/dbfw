@@ -2,7 +2,7 @@ import { AttachmentBuilder, ChatInputCommandInteraction, SlashCommandBuilder } f
 import { SQL, bot } from "../../../cache";
 import { base } from "../canvas/base";
 import { EmbedBuilder } from "@discordjs/builders";
-import { loadImage } from "canvas";
+
 export default {
     data: new SlashCommandBuilder()
         .setName("balance")

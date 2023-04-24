@@ -93,6 +93,39 @@ class Economy extends BaseTable {
         const [rows] = await this._sql.exec(query, [uid, gid]);
         return [rows[0].balance, rows[0].bank];
     }
+
+    async addBalance(uid: string, gid: string, amount: number): Promise<[number, number]> {
+        this.checkAndadd(uid, gid);
+        const query = `UPDATE ECONOMY SET balance = balance + ? WHERE uid = ? AND gid = ?`;
+        await this._sql.exec(query, [amount, uid, gid]);
+        return await this.getBalance(uid, gid);
+    }
+
+    async setBalance(uid: string, gid: string, amount: number): Promise<[number, number]> {
+        this.checkAndadd(uid, gid);
+        const query = `UPDATE ECONOMY SET balance = ? WHERE uid = ? AND gid = ?`;
+        await this._sql.exec(query, [amount, uid, gid]);
+        return await this.getBalance(uid, gid);
+    }
+
+    async addBank(uid: string, gid: string, amount: number): Promise<[number, number]> {
+        this.checkAndadd(uid, gid);
+        const query = `UPDATE ECONOMY SET bank = bank + ? WHERE uid = ? AND gid = ?`;
+        await this._sql.exec(query, [amount, uid, gid]);
+        return await this.getBalance(uid, gid);
+    }
+
+    async setBank(uid: string, gid: string, amount: number): Promise<[number, number]> {
+        this.checkAndadd(uid, gid);
+        const query = `UPDATE ECONOMY SET bank = ? WHERE uid = ? AND gid = ?`;
+        await this._sql.exec(query, [amount, uid, gid]);
+        return await this.getBalance(uid, gid);
+    }
+
+    async removeRecord(uid: string, gid: string) {
+        const query = `DELETE FROM ECONOMY WHERE uid = ? AND gid = ?`;
+        await this._sql.exec(query, [uid, gid]);
+    }
 }
 
 export class SQLClass implements SQLInterface {

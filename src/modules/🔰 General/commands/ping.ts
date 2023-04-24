@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
-import { pingEmbed } from "../Embeds/generalEmbeds";
+import { pingEmbed } from "../embeds/generalEmbeds";
 
 export default {
     data: new SlashCommandBuilder()
