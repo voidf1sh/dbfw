@@ -18,25 +18,12 @@ export default {
 
         const [canvCons, field] = await base(u, 250, 56.25, 17.5);
 
-        const desiredItemHeight = field.height * .3;
-
-        const tempText = "12345678910kmbyqd Wallet: Bank:";
-        const tHeight = canvCons.setFontHeight(desiredItemHeight, tempText);
-
-        const icon = interaction.guild.iconURL({ extension: "png", size: 512 });
-
-        if(icon) {
-            canvCons.save();
-
-            const guildIcon = await loadImage(icon);
-            canvCons.strokeCircle(field.x + field.width * 0.15, field.y + (field.height / 2), desiredItemHeight);
-            canvCons.drawImage(guildIcon, field.x + field.width * 0.15 - desiredItemHeight/2, field.y + (field.height / 2) - desiredItemHeight/2, desiredItemHeight, desiredItemHeight);
-
-            canvCons.restore();
-        }
+        canvCons.ctx.font = `20px ${canvCons.fontFamily}`;
 
         const text = `Wallet: ${bal} Bank: ${bank}`;
-        canvCons.text(text, field.x + field.width * 0.35, field.y + (field.height / 2) + tHeight/2, "#FFFFFF", field.width*.5);
+        const [tw, th] = canvCons.measureText(text);
+
+        canvCons.text(text, field.x + field.width/2 - tw/2, field.y + field.height/2 + th/2);
 
         const buf = canvCons.canvas.toBuffer();
 
