@@ -1,6 +1,7 @@
 import { GatewayIntentBits, Partials } from "discord.js";
-import { Bot, SQLClass } from "./structs/structs";
+import { Bot } from "./structs/structs";
 import { sqlconfig } from "../config.json";
+import { SQLClass } from "./structs/sql";
 
 export const bot = new Bot({
     intents: [

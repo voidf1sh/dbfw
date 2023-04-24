@@ -54,6 +54,12 @@ export type SQL_VARCHAR = {size: number, type: string, null: boolean};
 export type SQL_FLOAT = {size: number, type: number, null: boolean};
 export type SQL_INT = {type: "INT", null?: boolean};
 
+type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] extends N
+  ? Acc[number]
+  : Enumerate<N, [...Acc, Acc['length']]>
+
+export type IntRage<F extends number, T extends number> = Exclude<Enumerate<T>, Enumerate<F>>
+
 export type SQLTypes = SQL_INT | SQL_FLOAT | SQL_VARCHAR;
 
 export class VARCHAR implements SQL_VARCHAR {
