@@ -57,6 +57,20 @@ The command template can be found in any exisiting command and can be copied and
 
 The data and execution function can be manipulated or expanded on based on the function of the command.
 
+### config.json
+In the root of your project, you should add a config.json file. The current structure of the config is as follows:
+```
+{
+    "token": "Your bot token"
+    "logging": boolean,
+    "sqlconfig": {
+        "host": "localhost",    (May be different)
+        "user": "your username when setting up your sql server",
+        "password": "your password"
+    }
+}
+```
+
 ## SQL
 SQL functions are found in /src/structs/sql.ts
 
