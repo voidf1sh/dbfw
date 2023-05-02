@@ -7,7 +7,7 @@ import {
     SlashCommandBuilder
 } from "discord.js";
 import { Module } from "../enums/enums";
-import { BotInterface, CommandData, CommandInterface, EventData, EventInterface } from "../types/types";
+import { BotInterface, CommandData, CommandInterface, EventData, EventInterface, TaskInterface } from "../types/types";
 import { basename, join } from "path";
 import { bot } from "../cache";
 
@@ -17,10 +17,21 @@ export class Bot extends Client<boolean> implements BotInterface {
     private events: Collection<string, Event>;
     private _events: [object: null];
 
+    private tasks: Collection<string, TaskInterface>;
+    private runnintTasks: Collection<string, NodeJS.Timeout>;
+
     constructor(ClientOptions: ClientOptions) {
         super(ClientOptions)
         this.commands = new Collection<string, Command>();
         this.events = new Collection<string, Event>();
+        this.tasks = new Collection<string, TaskInterface>();
+        this.runnintTasks = new Collection<string, NodeJS.Timeout>();
+    }
+
+    addTask(task: TaskInterface): void {
+        if(this.runnintTasks.has(task.name)) this.clearTask(task.name);
+        this.tasks.set(task.name, task);
+        this.runnintTasks.set(task.name, setInterval(task.execute, task.interval));
     }
 
     bindAllEvents(): void {
@@ -33,6 +44,15 @@ export class Bot extends Client<boolean> implements BotInterface {
 
     clearCommands(): void {
         this.commands.clear();
+    }
+
+    clearTask(name: string): void {
+        const task = this.tasks.get(name);
+        if(!task) return;
+
+        clearInterval(this.runnintTasks.get(name));
+        this.tasks.delete(name);
+        this.runnintTasks.delete(name);
     }
 
     getCommand(cmd: string): Command | undefined {
@@ -53,6 +73,10 @@ export class Bot extends Client<boolean> implements BotInterface {
 
     getModules(): Module[] {
         return [...new Set(this.commands.map(command => command.getModule()))];
+    }
+
+    getTasks(): Collection<string, TaskInterface> {
+        return this.tasks;
     }
 
     addCommand(data: CommandData, path: string):  void {
@@ -164,3 +188,14 @@ export class Event implements EventInterface {
     }
 }
 
+export class Task implements TaskInterface {
+    name: string;
+    interval: number;
+    execute: () => Promise<void>;
+
+    constructor({name, interval, execute}: TaskInterface) {
+        this.name = name;
+        this.interval = interval;
+        this.execute = execute;
+    }
+}

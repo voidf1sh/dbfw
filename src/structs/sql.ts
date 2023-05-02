@@ -2,7 +2,7 @@ import { dim, green, red } from "chalk";
 import { FLOAT, SQLInterface, SQL_FLOAT, SQL_VARCHAR, VARCHAR } from "../types/types";
 import { log } from "../utils/logger";
 import { ErrTag, SQLTag } from "../constants/constants";
-import { Connection, ConnectionOptions, createConnection } from "mysql2/promise";
+import { Connection, ConnectionOptions, RowDataPacket, createConnection } from "mysql2/promise";
 
 class BaseTable {
     protected _sql: SQLInterface;
@@ -53,6 +53,11 @@ class BaseTable {
 
         return query;
     }
+
+    async exec(query: string, values?: unknown[]) {
+        log(dim(query), SQLTag);
+        return await this._sql.exec(query, values);
+    }
 }
 
 class Economy extends BaseTable {
@@ -84,47 +89,80 @@ class Economy extends BaseTable {
         const query = this.genInsertQuery();
         //The first 5 entries are for each of the fields in the table, the final two are for the prim keys used for determining if the record already exists.
         const values = [uid, gid, 500, 0, 0, uid, gid];
-        this._sql.exec(query, values);
+        this.exec(query, values);
     }
 
     async getBalance(uid: string, gid: string): Promise<[number, number]> {
         this.checkAndadd(uid, gid);
         const query = `SELECT balance, bank FROM ECONOMY WHERE uid = ? AND gid = ?`;
-        const [rows] = await this._sql.exec(query, [uid, gid]);
+        const [rows] = await this.exec(query, [uid, gid]);
         return [rows[0].balance, rows[0].bank];
     }
 
     async addBalance(uid: string, gid: string, amount: number): Promise<[number, number]> {
         this.checkAndadd(uid, gid);
         const query = `UPDATE ECONOMY SET balance = balance + ? WHERE uid = ? AND gid = ?`;
-        await this._sql.exec(query, [amount, uid, gid]);
+        await this.exec(query, [amount, uid, gid]);
         return await this.getBalance(uid, gid);
     }
 
     async setBalance(uid: string, gid: string, amount: number): Promise<[number, number]> {
         this.checkAndadd(uid, gid);
         const query = `UPDATE ECONOMY SET balance = ? WHERE uid = ? AND gid = ?`;
-        await this._sql.exec(query, [amount, uid, gid]);
+        await this.exec(query, [amount, uid, gid]);
         return await this.getBalance(uid, gid);
     }
 
     async addBank(uid: string, gid: string, amount: number): Promise<[number, number]> {
         this.checkAndadd(uid, gid);
         const query = `UPDATE ECONOMY SET bank = bank + ? WHERE uid = ? AND gid = ?`;
-        await this._sql.exec(query, [amount, uid, gid]);
+        await this.exec(query, [amount, uid, gid]);
         return await this.getBalance(uid, gid);
     }
 
     async setBank(uid: string, gid: string, amount: number): Promise<[number, number]> {
         this.checkAndadd(uid, gid);
         const query = `UPDATE ECONOMY SET bank = ? WHERE uid = ? AND gid = ?`;
-        await this._sql.exec(query, [amount, uid, gid]);
+        await this.exec(query, [amount, uid, gid]);
         return await this.getBalance(uid, gid);
+    }
+
+    async addXP(uid: string, gid: string, amount: number): Promise<number> {
+        this.checkAndadd(uid, gid);
+        const query = `UPDATE ECONOMY SET xp = xp + ? WHERE uid = ? AND gid = ?`;
+        await this.exec(query, [amount, uid, gid]);
+        return await this.getXP(uid, gid);
+    }
+
+    async setXP(uid: string, gid: string, amount: number): Promise<number> {
+        this.checkAndadd(uid, gid);
+        const query = `UPDATE ECONOMY SET xp = ? WHERE uid = ? AND gid = ?`;
+        await this.exec(query, [amount, uid, gid]);
+        return await this.getXP(uid, gid);
+    }
+
+    async getXP(uid: string, gid: string): Promise<number> {
+        this.checkAndadd(uid, gid);
+        const query = `SELECT xp FROM ECONOMY WHERE uid = ? AND gid = ?`;
+        const [rows] = await this.exec(query, [uid, gid]);
+        return rows[0].xp;
+    }
+
+    async getTopBalances(gid: string, limit: number): Promise<[string, number][]> {
+        const query = `SELECT uid, balance, bank, (balance + bank) as total_amount FROM ECONOMY WHERE gid = ? ORDER BY total_amount DESC, balance DESC`;
+        const [rows] = await this.exec(query, [gid]) as RowDataPacket[];
+        return rows.slice(0, limit).map(row => [row.uid, row.total_amount]);
+    }        
+    
+    async getTopXP(gid: string, limit: number): Promise<[string, number][]> {
+        const query = `SELECT uid, xp FROM ECONOMY WHERE gid = ? ORDER BY xp DESC`;
+        const [rows] = await this.exec(query, [gid]) as RowDataPacket[];
+        return rows.slice(0, limit).map(row => [row.uid, row.xp]);
     }
 
     async removeRecord(uid: string, gid: string) {
         const query = `DELETE FROM ECONOMY WHERE uid = ? AND gid = ?`;
-        await this._sql.exec(query, [uid, gid]);
+        await this.exec(query, [uid, gid]);
     }
 }
 

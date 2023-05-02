@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { ChatInputCommandInteraction } from "discord.js";
 import { SQL } from "../../../cache";
-import { addCurrencyMgr, removeCurrencyMgr, removeUserMgr, setCurrencyMgr, userNotFoundEconMgr } from "../embeds/econEmbeds";
+import { addCurrencyMgr, addXPMgr, removeCurrencyMgr, removeUserMgr, setCurrencyMgr, userNotFoundEconMgr } from "../embeds/econEmbeds";
 
 export default {
     data: new SlashCommandBuilder()
@@ -81,6 +81,23 @@ export default {
         )
         .addSubcommand(subcommand =>
             subcommand
+                .setName("add-xp")
+                .setDescription("Add xp to a user.")
+                .addUserOption(option =>
+                    option
+                        .setName("to")
+                        .setDescription("The user to add xp to.")
+                        .setRequired(true)
+                )
+                .addNumberOption(option =>
+                    option
+                        .setName("amount")
+                        .setDescription("The amount of xp to add.")
+                        .setRequired(true)
+                )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
                 .setName("delete-user")
                 .setDescription("Remove user record from econ database.")
                 .addUserOption(option =>
@@ -131,6 +148,15 @@ export default {
             : SQL.Economy.setBank(user.id, interaction.guildId, amount);
 
             await interaction.reply({ embeds: [ setCurrencyMgr(destination, amount, user) ] });
+        } else if(sub === "add-xp") {
+            const user = ops.getUser("to");
+            const amount = ops.getNumber("amount");
+
+            if(!user) return await interaction.reply({ embeds: [ userNotFoundEconMgr() ] });
+
+            SQL.Economy.addXP(user.id, interaction.guildId, amount);
+
+            await interaction.reply({ embeds: [ addXPMgr(amount, user) ] });
         } else if(sub === "delete-user") {
             const user = ops.getUser("user");
 

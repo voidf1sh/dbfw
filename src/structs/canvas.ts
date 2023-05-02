@@ -13,10 +13,12 @@ export class CanvasConstructor {
     canvas: Canvas;
     ctx: CanvasRenderingContext2D;
     fontFamily: string;
+    color: string;
 
     constructor(width: number, height: number) {
         this.canvas = createCanvas(width, height);
         this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
+        this.color = "#FFFFFF";
     }
 
     addRoundRect(x: number, y: number, width: number, height: number, radius: number, clip=false): CanvasElement {
@@ -41,6 +43,21 @@ export class CanvasConstructor {
 
     drawImage(img: Canvas | Image, x: number, y: number, width: number, height: number) {
         this.ctx.drawImage(img, x, y, width, height);
+    }
+
+    drawRoundedRect(x: number, y: number, width: number, height: number, radius: number, clip=false) {
+        this.ctx.beginPath();
+        this.ctx.moveTo(x + radius, y);
+        this.ctx.lineTo(x + width - radius, y);
+        this.ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+        this.ctx.lineTo(x + width, y + height - radius);
+        this.ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        this.ctx.lineTo(x + radius, y + height);
+        this.ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+        this.ctx.lineTo(x, y + radius);
+        this.ctx.quadraticCurveTo(x, y, x + radius, y);
+        this.ctx.closePath();
+        if(clip) this.ctx.clip();
     }
 
     fill(style: string | CanvasGradient | CanvasPattern) {
@@ -98,8 +115,38 @@ export class CanvasConstructor {
     }
 
     measureText(text: string): [number, number] {
-        const metrics = this.ctx.measureText(text);
-        return [metrics.width, metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent];
+        const canvas = createCanvas(1000, 1000);
+        const ctx = canvas.getContext('2d');
+
+        ctx.font = this.ctx.font;
+        ctx.textBaseline = 'top';
+
+        const textWidth = ctx.measureText(text).width;
+        ctx.fillText(text, 100, 100);
+
+        // Get the image data
+        const imageData = ctx.getImageData(100, 100, textWidth, canvas.height - 100);
+        const data = imageData.data;
+
+        // Loop through the pixels to find the highest and lowest non-transparent pixels
+        let highestY = canvas.height;
+        let lowestY = 0;
+
+        for (let y = 0; y < imageData.height; y++) {
+            for (let x = 0; x < textWidth; x++) {
+                const index = (y * imageData.width + x) * 4;
+                const alpha = data[index + 3];
+
+                if (alpha > 0) {
+                    highestY = Math.min(highestY, y);
+                    lowestY = Math.max(lowestY, y);
+                }
+            }
+        }
+
+        // Calculate the actual height
+        const actualHeight = lowestY - highestY + 1;
+        return [textWidth, actualHeight];
     }
 
     restore() {

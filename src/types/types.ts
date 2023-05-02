@@ -35,6 +35,12 @@ export interface EventInterface {
     isOnce: () => boolean;
 }
 
+export interface TaskInterface {
+    name: string;
+    interval: number;
+    execute: () => Promise<void>;
+}
+
 export interface SQLInterface {
     exec: (query: string, values?: unknown[]) => Promise<[RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]]>;
     getConnection: () => Connection;

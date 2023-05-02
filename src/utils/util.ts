@@ -109,3 +109,27 @@ export function rgbToHex(r: number, g: number, b: number) {
 export function rad(deg: number): number {
     return deg * Math.PI / 180;
 }
+
+export function numberWithCommas(n: number): string {
+    const isNegative = n < 0;
+    const absValue = Math.abs(n);
+    const parts = absValue.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const result = parts.join(".");
+    return isNegative ? '-' + result : result;
+}
+
+export function getLevel(xp: number) {
+    const A = 1; // Adjust this constant to control the leveling curve
+    const B = 2; // Adjust this constant to control the leveling curve
+
+    const levelDecimal = (1 + Math.sqrt(1 + (8 * xp) / (A * B))) / 2;
+    return levelDecimal;
+}
+
+export function xpToLevelProgress(xp: number) {
+    const levelDecimal = getLevel(xp);
+    const level = Math.floor(levelDecimal);
+    const progress = (levelDecimal - level) * 100;
+    return progress.toFixed(2); // Returns progress as a string with two decimal places
+}  
