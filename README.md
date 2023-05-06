@@ -320,3 +320,8 @@ Commonly, custom types have one to two arguments. First is the size of the data 
 ### How to Test SQL Queries
 First, please execute `/populate-db` in any channel to get some sample data.
 
+#### Duration
+
+Command:
+`/duration 10`
+
