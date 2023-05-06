@@ -1,5 +1,12 @@
 # db-sys-final
-Database Systems Final Project Discord Bot
+Database Systems Final Project SQL Discord Bot
+
+## Introduction
+Our goal for this project was to create a Discord Bot that used SQL as it's database language of choice. Originally, we didn't have an exact idea of what function/purpose this Discord Bot should serve because of the concept's versatility. With that in mind, we set out bot up with a modular approach. While, we decided to many focus on an economic environment, our bot can create different tables and serve different purposes without changing the framework of the bot. We did not take any shortcuts when creating the boilerplate for our bot. Although you cannot technically see it when utilizing the bot, it comes with advanced framework features you would see in any actual production bot today. We implemented a command handler, event handler, our own schema framework, and much more. Our codebase is approching 3000 lines. We even chose to write out bot in TypeScript instead of JavaScript to streamline development with IntelliSense.
+
+## ER Diagram
+
+![diagram](https://user-images.githubusercontent.com/80983143/236587504-2668bfa0-ad0b-4583-8429-44c352884c5d.png)
 
 ## Installation
 
