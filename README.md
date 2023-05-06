@@ -353,3 +353,56 @@ First, please execute `/populate-db` in any channel to get some sample data.
 Command:
 `/duration 10`
 
+Query:
+`SELECT game FROM GAMES WHERE length <= [len]`
+
+Example:
+![image](https://user-images.githubusercontent.com/80983143/236590078-ea1c95a1-8f41-48f0-b0df-7e745ad5a64d.png)
+
+
+#### Nickname
+
+Command:
+`/nickname`
+
+Query:
+`SELECT nickname FROM USERS WHERE did = [discord id]`
+
+Example:
+![image](https://user-images.githubusercontent.com/80983143/236590084-a75bb8cd-993f-4459-bf40-02e516162775.png)
+
+
+#### Total
+
+Command:
+`/total [your user]`
+
+Query:
+`SELECT u.did, u.nickname, sum(hours) AS total_h FROM USERS u LEFT OUTER JOIN GAMERS gr ON u.did = gr.did GROUP BY u.did, u.nickname HAVING u.did = ? ORDER BY u.did`
+
+Example:
+![image](https://user-images.githubusercontent.com/80983143/236590145-78442993-b823-4b29-be03-a4cb38a5b0c9.png)
+
+
+#### Instructions
+
+Command:
+`/instructions Blackjack`
+
+Query:
+`SELECT gameInstructions FROM GAMES WHERE game = ?`;
+
+Example:
+![image](https://user-images.githubusercontent.com/80983143/236590139-740fb12b-0439-49d5-8f43-cdc68e7f0d49.png)
+
+
+#### Community
+
+Command:
+`Community Blackjack`
+
+Query:
+`SELECT DISTINCT gr.did, gr.hours FROM GAMERS gr WHERE gr.did IN (SELECT gr.did FROM GAMES g, GAMERS gr, USERS u WHERE g.game = ? AND g.game = gr.game) ORDER BY gr.hours desc`;
+
+Example:
+![image](https://user-images.githubusercontent.com/80983143/236590152-b92dd6f4-ef62-4860-9fe3-364927dcb690.png)
