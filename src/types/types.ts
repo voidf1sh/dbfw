@@ -35,6 +35,12 @@ export interface EventInterface {
     isOnce: () => boolean;
 }
 
+export interface TaskInterface {
+    name: string;
+    interval: number;
+    execute: () => Promise<void>;
+}
+
 export interface SQLInterface {
     exec: (query: string, values?: unknown[]) => Promise<[RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]]>;
     getConnection: () => Connection;
@@ -47,7 +53,7 @@ export type EventData = {name: string, event: keyof ClientEvents, once?: boolean
 
 export type SQL_VARCHAR = {size: number, type: string, null: boolean};
 export type SQL_FLOAT = {size: number, type: number, null: boolean};
-export type SQL_INT = {type: "INT", null?: boolean};
+export type SQL_INT = {type: number, null?: boolean};
 
 type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] extends N
   ? Acc[number]
@@ -84,5 +90,31 @@ export class FLOAT implements SQL_FLOAT {
 
     toString(): string {
         return `FLOAT(${this.size})${this.null ? " NULL" : " NOT NULL"}`;
+    }
+}
+
+export class INT implements SQL_INT {
+    type: number;
+    null: boolean;
+
+    constructor(isNull: boolean = true) {
+        this.null = isNull;
+    }
+
+    toString(): string {
+        return `INT${this.null ? " NULL" : " NOT NULL"}`;
+    }
+}
+
+export class BIGINT implements SQL_INT {
+    type: number;
+    null: boolean;
+
+    constructor(isNull: boolean = true) {
+        this.null = isNull;
+    }
+
+    toString(): string {
+        return `BIGINT${this.null ? " NULL" : " NOT NULL"}`;
     }
 }

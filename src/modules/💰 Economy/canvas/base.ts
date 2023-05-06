@@ -35,7 +35,11 @@ export async function base(user: User, width = defWidth, height = defHeight, rad
 
     const baseCanvas = new CanvasConstructor(width, height);
 
-    const color = (user.hexAccentColor as string) || await baseCanvas.getAverageImageColor(avatarURL);
+    let color = (user.hexAccentColor as string) || await baseCanvas.getAverageImageColor(avatarURL);
+    if(color === "#000000") color = "#5865F2";
+
+    baseCanvas.color = color;
+    
 
     //First, there will be a rounded rectangle as the background.
     baseCanvas.fullRoundRect(radius);
