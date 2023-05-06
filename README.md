@@ -28,6 +28,20 @@ Database Systems Final Project SQL Discord Bot
   - [Creating Tables](https://github.com/garbearrr/db-sys-final/blob/master/README.md#creating-tables)
   - [Current App Schemas](https://github.com/garbearrr/db-sys-final/blob/master/README.md#current-app-schemas)
   - [How to Test SQL Queries](https://github.com/garbearrr/db-sys-final/blob/master/README.md#how-to-test-sql-queries)
+    - [Duration](https://github.com/garbearrr/db-sys-final/blob/master/README.md#duration)
+    - [Nickname](https://github.com/garbearrr/db-sys-final/blob/master/README.md#nickname)
+    - [Total](https://github.com/garbearrr/db-sys-final/blob/master/README.md#total)
+    - [Instructions](https://github.com/garbearrr/db-sys-final/blob/master/README.md#instructions)
+    - [Community](https://github.com/garbearrr/db-sys-final/blob/master/README.md#community)
+  - [Economy](https://github.com/garbearrr/db-sys-final/blob/master/README.md#economy)
+    - [Economy Management Commands](https://github.com/garbearrr/db-sys-final/blob/master/README.md#economy-management-commands)
+    - [Balance Command](https://github.com/garbearrr/db-sys-final/blob/master/README.md#balance-command)
+    - [Level Command](https://github.com/garbearrr/db-sys-final/blob/master/README.md#level-command)
+    - [Blackjack](https://github.com/garbearrr/db-sys-final/blob/master/README.md#blackjack)
+    - [SQL Notes](https://github.com/garbearrr/db-sys-final/blob/master/README.md#sql-notes)
+  - [Contributions](https://github.com/garbearrr/db-sys-final/blob/master/README.md#contributions)
+    - [Gia Walker](https://github.com/garbearrr/db-sys-final/blob/master/README.md#gia-walker)
+    - [Garrett Weaver](https://github.com/garbearrr/db-sys-final/blob/master/README.md#garrett-weaver)
 
 ## Introduction
 Our goal for this project was to create a Discord Bot that used SQL as it's database language of choice. Originally, we didn't have an exact idea of what function/purpose this Discord Bot should serve because of the concept's versatility. With that in mind, we set out bot up with a modular approach. While, we decided to many focus on an economic environment, our bot can create different tables and serve different purposes without changing the framework of the bot. We did not take any shortcuts when creating the boilerplate for our bot. Although you cannot technically see it when utilizing the bot, it comes with advanced framework features you would see in any actual production bot today. We implemented a command handler, event handler, our own schema framework, and much more. Our codebase is approching 3000 lines. We even chose to write out bot in TypeScript instead of JavaScript to streamline development with IntelliSense.
@@ -390,7 +404,7 @@ Command:
 `/instructions Blackjack`
 
 Query:
-`SELECT gameInstructions FROM GAMES WHERE game = ?`;
+`SELECT gameInstructions FROM GAMES WHERE game = ?`
 
 Example:
 ![image](https://user-images.githubusercontent.com/80983143/236590139-740fb12b-0439-49d5-8f43-cdc68e7f0d49.png)
@@ -402,7 +416,43 @@ Command:
 `Community Blackjack`
 
 Query:
-`SELECT DISTINCT gr.did, gr.hours FROM GAMERS gr WHERE gr.did IN (SELECT gr.did FROM GAMES g, GAMERS gr, USERS u WHERE g.game = ? AND g.game = gr.game) ORDER BY gr.hours desc`;
+`SELECT DISTINCT gr.did, gr.hours FROM GAMERS gr WHERE gr.did IN (SELECT gr.did FROM GAMES g, GAMERS gr, USERS u WHERE g.game = ? AND g.game = gr.game) ORDER BY gr.hours desc`
 
 Example:
 ![image](https://user-images.githubusercontent.com/80983143/236590152-b92dd6f4-ef62-4860-9fe3-364927dcb690.png)
+
+### Economy
+As previously mentioned, we had a strong focus on our economy module. While we wanted to diversify and use some of the more complex queries we've learned this semester (seen above), we also wanted to present a small portion that would resemble an actual production bot. This is best seen in our economy module. A lot of the commands and features in this module are presented with programmatically generated images made with node canvas. Since Discord is a text platform, we wanted to enhance user experience by presenting our stored data with something more complex and pleasing. 
+
+#### Economy Managment Commands
+Please feel free to use and check out our economy managment command family found under `/econ-manager`. These are simply query commands that allow you to add and take xp, coins, and many more economy-based commands. These do not feature programmatically generated images.
+
+#### Balance Command
+`/balance`
+
+The balance command creates a canvas image showing user bank and wallet. It features the user's avatar and also generates a background color that represents the user's average avatar color (such that it isn't a default avatar).
+
+`SELECT balance, bank FROM ECONOMY WHERE did = ? AND gid = ?`
+
+#### Level Command
+`/level`
+
+Much like the balance command, except, this shows level progression via a leveling bar.
+
+`SELECT xp FROM ECONOMY WHERE did = ? AND gid = ?`
+
+#### Blackjack
+Finally, we created a full scale blackjack game. We support hitting, standing, splitting (up to three times per hand), doubling down, and insurance. Also, everything you see during the game is all programmatically generated to look like a Discord embed. Not just the embed itself, but also, all of the cards are created from scratch with node canvas. We highly encourage you to play. This is the closest thing you will see to an actual production discord bot feature. This implements many different economic queries by adding/taking chips and generating xp based on game results.
+
+#### SQL Notes
+While the bot is running, we created a logger to track bot events during execution. At any time, check your standard output to read any `SQL` log tags to see the queries being executed live at any given moment.
+
+### Contributions
+
+#### Gia Walker
+Gia wrote all other queries and most features outside of the economy module.
+Also contibuted parts of the economy module.
+
+#### Garrett Weaver
+Garrett wrote most of the economy module + blackjack.
+Also wrote the bot framework due to being more familiar with the process.
