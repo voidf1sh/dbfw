@@ -20,7 +20,7 @@ Database Systems Final Project SQL Discord Bot
 - [Documentation (for Developers)](https://github.com/garbearrr/db-sys-final/blob/master/README.md#documentation-for-developers)
   - [Adding a Module](https://github.com/garbearrr/db-sys-final/blob/master/README.md#adding-a-module)
   - [Adding a Command](https://github.com/garbearrr/db-sys-final/blob/master/README.md#adding-a-command)
-- [SQL](https://github.com/garbearrr/db-sys-final/blob/master/README.md#sql)
+  - [SQL](https://github.com/garbearrr/db-sys-final/blob/master/README.md#sql)
   - [Tables](https://github.com/garbearrr/db-sys-final/blob/master/README.md#tables)
   - [Bot Usage (for Developers)](https://github.com/garbearrr/db-sys-final/blob/master/README.md#bot-usage-for-developers)
   - [SQL](https://github.com/garbearrr/db-sys-final/blob/master/README.md#sql-1)
@@ -166,7 +166,7 @@ The command template can be found in any exisiting command and can be copied and
 
 The data and execution function can be manipulated or expanded on based on the function of the command.
 
-## SQL
+### SQL
 SQL functions are found in /src/structs/sql.ts
 
 ### Tables
