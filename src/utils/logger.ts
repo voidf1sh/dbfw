@@ -1,5 +1,5 @@
 import { bold, dim } from "chalk";
-import { logging } from "../../config.json";
+const logging = process.env.LOGGING;
 
 function _time() {
     const date = new Date();

@@ -1,7 +1,11 @@
 import { GatewayIntentBits, Partials } from "discord.js";
 import { Bot } from "./structs/structs";
-import { sqlconfig } from "../config.json";
 import { SQLClass } from "./structs/sql";
+const sqlconfig = {
+    "host": process.env.DBHOST,
+    "user": process.env.DBUSER,
+    "password": process.env.DBPASS
+};
 
 export const bot = new Bot({
     intents: [

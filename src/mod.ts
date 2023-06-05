@@ -1,11 +1,13 @@
+const dotenv = require("dotenv");
+dotenv.config();
 import { bot } from "./cache";
 import { loadAll } from "./utils/util";
-import { token } from "../config.json";
+const { TOKEN } = process.env;
 
 export const setup = async () => {
     await loadAll();
 
-    bot.login(token);
+    bot.login(TOKEN);
 }
 
 setup();

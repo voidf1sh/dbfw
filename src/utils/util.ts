@@ -2,7 +2,7 @@ import { bot } from "../cache";
 import { existsSync, lstatSync, readdirSync } from "fs";
 import { join, sep } from "path";
 import { REST, Routes, RESTPostAPIChatInputApplicationCommandsJSONBody } from "discord.js";
-import { token } from "../../config.json";
+const { token } = process.env;
 import { log } from "./logger";
 
 import { dim, grey, red, yellow } from "chalk";

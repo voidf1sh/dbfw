@@ -455,7 +455,7 @@ export class SQLClass implements SQLInterface {
         log(green("Connected to SQL database!"), SQLTag);
 
         await this.query("CREATE DATABASE IF NOT EXISTS DISCORD");
-        await this.connection.changeUser({database: "DISCORD"});
+        await this.connection.changeUser({database: process.env.DBNAME});
 
         this.Economy = new Economy(this);
         await this.query(this.Economy.createTableQuery());
