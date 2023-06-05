@@ -132,18 +132,15 @@ https://discord.com/developers/applications
 12. All the way at the bottom of the page, copy the "generated url".
 13. This can be pasted in the search bar so your bot can be added to the server you made.
 
-### config.json
-In the root of your project, you should add a config.json file. The current structure of the config is as follows:
+### .env
+In the root of your project, you should add a .env file. The current structure of the .env is as follows:
 ```
-{
-    "token": "Your bot token"
-    "logging": boolean,
-    "sqlconfig": {
-        "host": "localhost",    (May be different)
-        "user": "your username when setting up your sql server",
-        "password": "your password"
-    }
-}
+TOKEN=<token>
+DBHOST=<ip or hostname>
+DBNAME=<database name>
+DBUSER=<database username>
+DBPASS=<database password>
+LOGGING=<true/false>
 ```
 
 ### Starting the Bot
