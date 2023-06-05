@@ -2,7 +2,7 @@ import { bot } from "../cache";
 import { existsSync, lstatSync, readdirSync } from "fs";
 import { join, sep } from "path";
 import { REST, Routes, RESTPostAPIChatInputApplicationCommandsJSONBody } from "discord.js";
-const { token } = process.env;
+const { TOKEN } = process.env;
 import { log } from "./logger";
 
 import { dim, grey, red, yellow } from "chalk";
@@ -52,7 +52,7 @@ export async function refreshGuildSlashes(guildId: string) {
 
     if(!commandFiles.length) return;
 
-    const rest = new REST({ version: '10' }).setToken(token);
+    const rest = new REST({ version: '10' }).setToken(TOKEN);
 
     try {
         const data = await rest.put(
@@ -63,6 +63,43 @@ export async function refreshGuildSlashes(guildId: string) {
         log(yellow(`Refreshed Commands ${dim(data.length)} ${dim(grey(guildId))}`), SlashTag);
     } catch (_error) {
         log(red("Refresh Failure! ") + dim(grey(guildId)), `${ErrTag}|${SlashTag}`);
+    }
+}
+
+export async function refreshGlobalSlashes() {
+    const commandFiles: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
+
+    bot.getCommands().forEach(command => {
+        const cData = command.getData();
+        const obj = cData.toJSON();
+
+        obj.description += ` ⋆ ${command.getModule()}`;
+        obj.options?.forEach(option => {
+            option.description += ` ⋆ ${command.getModule()}`;
+        })
+        
+        if(obj.name === "reload") {
+            const folders = readdirSync(join(__dirname, "../")).filter(f=>!f.endsWith(".ts"));
+            // @ts-ignore I can't figure out the correct typing it's no big deal.
+            obj.options[obj.options.findIndex(o=>o.name==="folder")].options[0].choices = folders.map(f=>({name: f, value: f}));
+        }
+
+        commandFiles.push(obj);
+    })
+
+    if(!commandFiles.length) return;
+
+    const rest = new REST({ version: '10' }).setToken(TOKEN);
+
+    try {
+        const data = await rest.put(
+            Routes.applicationCommands(bot.user!.id),
+            { body: commandFiles },
+        ) as [];
+        
+        log(yellow(`Refreshed Commands ${dim(data.length)} ${dim(grey("Global"))}`), SlashTag);
+    } catch (_error) {
+        log(red("Refresh Failure! ") + dim(grey("Global ")) + _error, `${ErrTag}|${SlashTag}`);
     }
 }
 
